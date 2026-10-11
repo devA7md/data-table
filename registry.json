@@ -39,6 +39,11 @@
           "target": "@components/data-table/table-query.ts"
         },
         {
+          "path": "src/table/table-row-actions.tsx",
+          "type": "registry:component",
+          "target": "@components/data-table/table-row-actions.tsx"
+        },
+        {
           "path": "src/table/column-view.tsx",
           "type": "registry:component",
           "target": "@components/data-table/column-view.tsx"
