@@ -1,0 +1,143 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "data-table",
+  "homepage": "https://github.com/devA7md/data-table",
+  "items": [
+    {
+      "name": "data-table",
+      "type": "registry:block",
+      "title": "Data Table",
+      "description": "Generic, reusable React data table built on @tanstack/react-table and Base UI primitives.",
+      "dependencies": [
+        "@base-ui/react",
+        "@tanstack/react-table",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge",
+        "class-variance-authority"
+      ],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "src/table/table.types.ts",
+          "type": "registry:file",
+          "target": "@components/data-table/table.types.ts"
+        },
+        {
+          "path": "src/table/use-table.ts",
+          "type": "registry:hook",
+          "target": "@components/data-table/use-table.ts"
+        },
+        {
+          "path": "src/table/use-debounce.ts",
+          "type": "registry:hook",
+          "target": "@components/data-table/use-debounce.ts"
+        },
+        {
+          "path": "src/table/table-query.ts",
+          "type": "registry:file",
+          "target": "@components/data-table/table-query.ts"
+        },
+        {
+          "path": "src/table/column-header.tsx",
+          "type": "registry:component",
+          "target": "@components/data-table/column-header.tsx"
+        },
+        {
+          "path": "src/table/column-view.tsx",
+          "type": "registry:component",
+          "target": "@components/data-table/column-view.tsx"
+        },
+        {
+          "path": "src/table/pagination.tsx",
+          "type": "registry:component",
+          "target": "@components/data-table/pagination.tsx"
+        },
+        {
+          "path": "src/table/table-component.tsx",
+          "type": "registry:component",
+          "target": "@components/data-table/table-component.tsx"
+        },
+        {
+          "path": "src/table/table-context-menu.tsx",
+          "type": "registry:component",
+          "target": "@components/data-table/table-context-menu.tsx"
+        },
+        {
+          "path": "src/table/table-data-row.tsx",
+          "type": "registry:component",
+          "target": "@components/data-table/table-data-row.tsx"
+        },
+        {
+          "path": "src/table/table-filter.tsx",
+          "type": "registry:component",
+          "target": "@components/data-table/table-filter.tsx"
+        },
+        {
+          "path": "src/table/table-header-sort.tsx",
+          "type": "registry:component",
+          "target": "@components/data-table/table-header-sort.tsx"
+        },
+        {
+          "path": "src/table/table-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/data-table/table-toolbar.tsx"
+        },
+        {
+          "path": "src/table/table-toolbar-search.tsx",
+          "type": "registry:component",
+          "target": "@components/data-table/table-toolbar-search.tsx"
+        },
+        {
+          "path": "src/components/ui/button.tsx",
+          "type": "registry:ui",
+          "target": "@components/ui/button.tsx"
+        },
+        {
+          "path": "src/components/ui/card.tsx",
+          "type": "registry:ui",
+          "target": "@components/ui/card.tsx"
+        },
+        {
+          "path": "src/components/ui/context-menu.tsx",
+          "type": "registry:ui",
+          "target": "@components/ui/context-menu.tsx"
+        },
+        {
+          "path": "src/components/ui/dropdown-menu.tsx",
+          "type": "registry:ui",
+          "target": "@components/ui/dropdown-menu.tsx"
+        },
+        {
+          "path": "src/components/ui/input.tsx",
+          "type": "registry:ui",
+          "target": "@components/ui/input.tsx"
+        },
+        {
+          "path": "src/components/ui/select.tsx",
+          "type": "registry:ui",
+          "target": "@components/ui/select.tsx"
+        },
+        {
+          "path": "src/components/ui/table.tsx",
+          "type": "registry:ui",
+          "target": "@components/ui/table.tsx"
+        }
+      ]
+    },
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "title": "Utils",
+      "description": "cn() helper using clsx and tailwind-merge.",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ]
+    }
+  ]
+}
