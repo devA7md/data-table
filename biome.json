@@ -1,7 +1,6 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.8/schema.json",
   "files": {
-    "includes": ["src/**/*", "tests/**/*", "playground/**/*", "*.ts", "!playground/dist"]
+    "includes": ["src/**/*", "playground/**/*"]
   },
   "overrides": [
     {

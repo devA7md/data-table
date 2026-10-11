@@ -27,6 +27,7 @@ export function useTable<TData extends RowData, TValue>({
   manualFiltering = false,
   initialState,
   transformQueryParams,
+  t,
 }: UseTableOptions<TData, TValue>): UseTableReturn<TData> {
   const [sorting, setSorting] = useState<SortingState>(
     initialState?.sorting ?? [
@@ -94,6 +95,9 @@ export function useTable<TData extends RowData, TValue>({
     manualPagination,
     manualSorting,
     manualFiltering,
+    meta: {
+      t,
+    },
   });
 
   const queryParams = useMemo(() => {

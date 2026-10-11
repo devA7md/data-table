@@ -1,11 +1,15 @@
 import { flexRender, type Header } from "@tanstack/react-table";
 import { ChevronDownIcon, ChevronsUpDownIcon, ChevronUpIcon } from "lucide-react";
 
+import { getTableTranslator } from "./localization";
+
 interface TableHeaderSortProps<TData, TValue> {
   header: Header<TData, TValue>;
 }
 
 export function TableHeaderSort<TData, TValue>({ header }: TableHeaderSortProps<TData, TValue>) {
+  const t = getTableTranslator(header.getContext().table);
+
   return (
     <button
       type="button"
@@ -16,10 +20,10 @@ export function TableHeaderSort<TData, TValue>({ header }: TableHeaderSortProps<
       title={
         header.column.getCanSort()
           ? header.column.getNextSortingOrder() === "asc"
-            ? "Sort ascending"
+            ? t("sort_ascending")
             : header.column.getNextSortingOrder() === "desc"
-              ? "Sort descending"
-              : "Clear sort"
+              ? t("sort_descending")
+              : t("clear_sort")
           : undefined
       }
     >

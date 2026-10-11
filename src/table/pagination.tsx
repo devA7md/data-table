@@ -9,17 +9,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+
+import { getTableTranslator } from "./localization";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
 }
 
 export function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) {
+  const t = getTableTranslator(table);
+
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-0 sm:gap-3">
       <div className="flex items-center gap-2">
-        <p className="text-sm">rows_per_page</p>
+        <p className="text-sm">{t("rows_per_page")}</p>
         <Select
           value={`${table.getState().pagination.pageSize}`}
           onValueChange={(value) => {
@@ -41,7 +44,10 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
 
       <div className="flex items-center justify-center flex-col sm:flex-row gap-3 mt-2 sm:mt-0">
         <p className="flex text-sm">
-          page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+          {t("page_of", {
+            page: table.getState().pagination.pageIndex + 1,
+            total: table.getPageCount(),
+          })}
         </p>
 
         <div className="flex items-center gap-2">
@@ -52,15 +58,10 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
               className="h-8 w-8 cursor-pointer"
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
-              title="first"
+              title={t("go_to_first_page")}
             >
-              <span className="sr-only">Go to first page</span>
-              <ArrowLeftIcon
-                size={18}
-                className={cn({
-                  // "rotate-180": dir === "rtl",
-                })}
-              />
+              <span className="sr-only">{t("go_to_first_page")}</span>
+              <ArrowLeftIcon size={18} className="rtl:rotate-180" />
             </Button>
             <Button
               size="icon"
@@ -68,15 +69,10 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
               className="h-8 w-8 cursor-pointer"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
-              title="previous"
+              title={t("go_to_previous_page")}
             >
-              <span className="sr-only">Go to previous page</span>
-              <ChevronLeftIcon
-                size={18}
-                className={cn({
-                  // "rotate-180": dir === "rtl",
-                })}
-              />
+              <span className="sr-only">{t("go_to_previous_page")}</span>
+              <ChevronLeftIcon size={18} className="rtl:rotate-180" />
             </Button>
           </div>
 
@@ -87,15 +83,10 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
               className="h-8 w-8 cursor-pointer"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
-              title="next"
+              title={t("go_to_next_page")}
             >
-              <span className="sr-only">Go to next page</span>
-              <ChevronRightIcon
-                size={18}
-                className={cn({
-                  // "rotate-180": dir === "rtl",
-                })}
-              />
+              <span className="sr-only">{t("go_to_next_page")}</span>
+              <ChevronRightIcon size={18} className="rtl:rotate-180" />
             </Button>
             <Button
               size="icon"
@@ -103,15 +94,10 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
               className="h-8 w-8 cursor-pointer"
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}
-              title="last"
+              title={t("go_to_last_page")}
             >
-              <span className="sr-only">Go to last page</span>
-              <ArrowRightIcon
-                size={18}
-                className={cn({
-                  // "rotate-180": dir === "rtl",
-                })}
-              />
+              <span className="sr-only">{t("go_to_last_page")}</span>
+              <ArrowRightIcon size={18} className="rtl:rotate-180" />
             </Button>
           </div>
         </div>

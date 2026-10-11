@@ -11,6 +11,7 @@ import type {
 } from "@tanstack/react-table";
 import type { Dispatch, ReactElement, ReactNode, SetStateAction } from "react";
 
+import type { TableTranslator } from "./localization";
 import type { TableQueryParams } from "./table-query";
 
 export type RowAction<TData> = {
@@ -62,6 +63,8 @@ export interface UseTableOptions<
     rowSelection?: RowSelectionState;
   };
   transformQueryParams?: (params: TableQueryParams) => TQueryParams;
+  /** Translation function exposed to all table components via table meta. */
+  t?: TableTranslator;
 }
 
 export interface UseTableReturn<TData extends RowData> {

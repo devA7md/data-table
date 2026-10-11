@@ -2,6 +2,8 @@ import type { Table } from "@tanstack/react-table";
 import { useEffect, useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
+
+import { getTableTranslator } from "./localization";
 import { useDebounce } from "./use-debounce";
 
 interface TableToolbarSearchProps<TData> {
@@ -18,6 +20,7 @@ export function TableToolbarSearch<TData>({
   className,
 }: TableToolbarSearchProps<TData>) {
   const globalFilter = table.getState().globalFilter;
+  const t = getTableTranslator(table);
   const [inputValue, setInputValue] = useState(() => String(globalFilter ?? ""));
   const { debouncedValue } = useDebounce(inputValue, debounceMs);
 
@@ -34,7 +37,7 @@ export function TableToolbarSearch<TData>({
 
   return (
     <Input
-      placeholder={placeholder ?? "Search..."}
+      placeholder={placeholder ?? t("search_placeholder")}
       value={inputValue}
       onChange={(event) => setInputValue(event.target.value)}
       className={className}

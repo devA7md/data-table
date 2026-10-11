@@ -1,9 +1,14 @@
 export * from "./column-view";
+export * from "./localization";
 export * from "./pagination";
 export * from "./table.types";
-export { Table } from "./table-component";
-export { TableContextMenu } from "./table-context-menu";
+export * from "./table-component";
+export * from "./table-context-menu";
+export * from "./table-filter";
+export * from "./table-header-sort";
 export * from "./table-query";
-export { TableToolbar } from "./table-toolbar";
-export { TableToolbarSearch } from "./table-toolbar-search";
+export * from "./table-row-actions";
+export * from "./table-toolbar";
+export * from "./table-toolbar-search";
+export * from "./use-debounce";
 export * from "./use-table";

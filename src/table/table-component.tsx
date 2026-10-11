@@ -1,8 +1,7 @@
 import { flexRender, type Row } from "@tanstack/react-table";
+import { cn } from "cn";
 
 import { ContextMenuTrigger } from "@/components/ui/context-menu";
-import { cn } from "@/lib/utils";
-
 import {
   Table as ShadcnTable,
   TableBody,
@@ -11,11 +10,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
+import { getTableTranslator } from "./localization";
 import type { TableProps } from "./table.types";
 import { TableContextMenu } from "./table-context-menu";
 import { TableHeaderSort } from "./table-header-sort";
-import { useTable } from "./use-table";
 import { TableRowActions } from "./table-row-actions";
+import { useTable } from "./use-table";
 
 export function Table<TData, TValue>({
   columns,
@@ -30,7 +31,7 @@ export function Table<TData, TValue>({
   onRowClick,
   onRowDoubleClick,
   className,
-  emptyMessage = "No results.",
+  emptyMessage,
   renderToolbar,
   renderFooter,
   ...useTableOptions
@@ -58,6 +59,7 @@ export function Table<TData, TValue>({
   }).table;
 
   const table = externalTable ?? internalTable;
+  const t = getTableTranslator(table);
 
   return (
     <div className={cn("flex flex-col gap-4", className)}>
@@ -145,7 +147,7 @@ export function Table<TData, TValue>({
                   colSpan={table.getVisibleLeafColumns().length}
                   className="h-24 text-center"
                 >
-                  {emptyMessage}
+                  {emptyMessage ?? t("no_results")}
                 </TableCell>
               </TableRow>
             )}
