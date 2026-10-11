@@ -28,6 +28,11 @@
       ],
       "files": [
         {
+          "path": "src/table/index.ts",
+          "type": "registry:file",
+          "target": "@components/ui/data-table/index.ts"
+        },
+        {
           "path": "src/table/table.types.ts",
           "type": "registry:file",
           "target": "@components/ui/data-table/table.types.ts"
