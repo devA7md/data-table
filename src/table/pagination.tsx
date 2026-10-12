@@ -1,4 +1,4 @@
-import type { Table } from "@tanstack/react-table";
+import type { RowData } from "@tanstack/react-table";
 import { ArrowLeftIcon, ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -11,12 +11,15 @@ import {
 } from "@/components/ui/select";
 
 import { getTableTranslator } from "./localization";
+import type { DataTable } from "./table.types";
 
-interface DataTablePaginationProps<TData> {
-  table: Table<TData>;
+interface DataTablePaginationProps<TData extends RowData> {
+  table: DataTable<TData>;
 }
 
-export function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) {
+export function DataTablePagination<TData extends RowData>({
+  table,
+}: DataTablePaginationProps<TData>) {
   const t = getTableTranslator(table);
 
   return (
@@ -24,13 +27,13 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
       <div className="flex items-center gap-2">
         <p className="text-sm">{t("rows_per_page")}</p>
         <Select
-          value={`${table.getState().pagination.pageSize}`}
+          value={`${table.state.pagination.pageSize}`}
           onValueChange={(value) => {
             table.setPageSize(Number(value));
           }}
         >
           <SelectTrigger className="h-6 w-16">
-            <SelectValue placeholder={table.getState().pagination.pageSize} />
+            <SelectValue placeholder={table.state.pagination.pageSize} />
           </SelectTrigger>
           <SelectContent side="top">
             {[1, 5, 10, 20, 40].map((pageSize) => (
@@ -45,7 +48,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
       <div className="flex items-center justify-center flex-col sm:flex-row gap-3 mt-2 sm:mt-0">
         <p className="flex text-sm">
           {t("page_of", {
-            page: table.getState().pagination.pageIndex + 1,
+            page: table.state.pagination.pageIndex + 1,
             total: table.getPageCount(),
           })}
         </p>

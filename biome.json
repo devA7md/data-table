@@ -1,6 +1,6 @@
 {
   "files": {
-    "includes": ["src/**/*", "playground/**/*"]
+    "includes": ["src/**/*", "playground/**/*", "!playground/dist"]
   },
   "overrides": [
     {

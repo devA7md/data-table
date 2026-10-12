@@ -1,4 +1,4 @@
-import type { Row } from "@tanstack/react-table";
+import type { RowData } from "@tanstack/react-table";
 import { MoreVertical } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -9,13 +9,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import type { RowAction } from "./table.types";
+import type { DataTableRow, RowAction } from "./table.types";
 
-export function TableRowActions<TData>({
+export function TableRowActions<TData extends RowData>({
   row,
   actions,
 }: {
-  row: Row<TData>;
+  row: DataTableRow<TData>;
   actions: RowAction<TData>[] | ((row: TData) => RowAction<TData>[]);
 }) {
   const finalActions = typeof actions === "function" ? actions(row.original) : actions;

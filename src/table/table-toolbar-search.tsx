@@ -1,25 +1,26 @@
-import type { Table } from "@tanstack/react-table";
+import type { RowData } from "@tanstack/react-table";
 import { useEffect, useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 
 import { getTableTranslator } from "./localization";
+import type { DataTable } from "./table.types";
 import { useDebounce } from "./use-debounce";
 
-interface TableToolbarSearchProps<TData> {
-  table: Table<TData>;
+interface TableToolbarSearchProps<TData extends RowData> {
+  table: DataTable<TData>;
   placeholder?: string;
   debounceMs?: number;
   className?: string;
 }
 
-export function TableToolbarSearch<TData>({
+export function TableToolbarSearch<TData extends RowData>({
   table,
   placeholder,
   debounceMs = 300,
   className,
 }: TableToolbarSearchProps<TData>) {
-  const globalFilter = table.getState().globalFilter;
+  const globalFilter = table.state.globalFilter;
   const t = getTableTranslator(table);
   const [inputValue, setInputValue] = useState(() => String(globalFilter ?? ""));
   const { debouncedValue } = useDebounce(inputValue, debounceMs);

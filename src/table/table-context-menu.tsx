@@ -1,3 +1,4 @@
+import type { RowData } from "@tanstack/react-table";
 import type { ReactNode } from "react";
 
 import {
@@ -9,7 +10,7 @@ import {
 
 import type { TableContextMenuProps } from "./table.types";
 
-export function TableContextMenu<TData>({
+export function TableContextMenu<TData extends RowData>({
   row,
   actions,
   onClose,

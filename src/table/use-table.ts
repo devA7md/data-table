@@ -1,21 +1,19 @@
 import {
+  type ColumnDef,
   type ColumnFiltersState,
+  type ColumnVisibilityState,
   type ExpandedState,
   functionalUpdate,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   type PaginationState,
   type RowData,
   type RowSelectionState,
   type SortingState,
-  useReactTable,
-  type VisibilityState,
+  useTable as useTanStackTable,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 
 import type { UseTableOptions, UseTableReturn } from "./table.types";
+import { type DataTableFeatures, dataTableFeatures } from "./table-features";
 import { getTableQueryParams } from "./table-query";
 
 export function useTable<TData extends RowData, TValue>({
@@ -40,26 +38,23 @@ export function useTable<TData extends RowData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     initialState?.columnFilters ?? [],
   );
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+  const [columnVisibility, setColumnVisibility] = useState<ColumnVisibilityState>(
     initialState?.columnVisibility ?? {},
   );
   const [rowSelection, setRowSelection] = useState<RowSelectionState>(
     initialState?.rowSelection ?? {},
   );
-  const [globalFilter, setGlobalFilter] = useState<string>("");
+  const [globalFilter, setGlobalFilter] = useState<string>(initialState?.globalFilter ?? "");
   const [expanded, setExpanded] = useState<ExpandedState>({});
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: initialState?.pagination?.pageIndex ?? 0,
     pageSize: initialState?.pagination?.pageSize ?? 10,
   });
 
-  const table = useReactTable<TData>({
+  const table = useTanStackTable({
+    features: dataTableFeatures,
     data: data ?? [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
+    columns: columns as Array<ColumnDef<DataTableFeatures, TData, unknown>>,
     onSortingChange: (updater) => {
       const newSort = functionalUpdate(updater, sorting);
       setSorting(newSort);

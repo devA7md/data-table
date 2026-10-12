@@ -1,13 +1,13 @@
-import type { RowData, Table } from "@tanstack/react-table";
+import type { RowData } from "@tanstack/react-table";
 import { FilterIcon } from "lucide-react";
 import { useState } from "react";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-import type { TableFilterRenderer } from "./table.types";
+import type { DataTable, TableFilterRenderer } from "./table.types";
 
 type TableFilterProps<TData extends RowData> = {
-  table: Table<TData>;
+  table: DataTable<TData>;
   renderFilter: TableFilterRenderer<TData>;
 };
 
@@ -17,7 +17,7 @@ export function TableFilter<TData extends RowData>({
 }: TableFilterProps<TData>) {
   const [open, setOpen] = useState(false);
 
-  const hasFilters = table.getState().columnFilters.length > 0;
+  const hasFilters = table.state.columnFilters.length > 0;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

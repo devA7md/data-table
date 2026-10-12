@@ -48,6 +48,11 @@
           "target": "@components/ui/data-table/use-table.ts"
         },
         {
+          "path": "src/table/table-features.ts",
+          "type": "registry:file",
+          "target": "@components/ui/data-table/table-features.ts"
+        },
+        {
           "path": "src/table/use-debounce.ts",
           "type": "registry:hook",
           "target": "@components/ui/data-table/use-debounce.ts"
@@ -61,6 +66,11 @@
           "path": "src/table/table-row-actions.tsx",
           "type": "registry:component",
           "target": "@components/ui/data-table/table-row-actions.tsx"
+        },
+        {
+          "path": "src/table/actions-column.tsx",
+          "type": "registry:component",
+          "target": "@components/ui/data-table/actions-column.tsx"
         },
         {
           "path": "src/table/column-view.tsx",

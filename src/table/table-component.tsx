@@ -1,4 +1,4 @@
-import { flexRender, type Row } from "@tanstack/react-table";
+import { type ColumnDef, flexRender, type RowData } from "@tanstack/react-table";
 import { cn } from "cn";
 
 import { ContextMenuTrigger } from "@/components/ui/context-menu";
@@ -11,54 +11,79 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { createActionsColumn } from "./actions-column";
 import { getTableTranslator } from "./localization";
-import type { TableProps } from "./table.types";
+import type {
+  DataTable,
+  ExternalTableProps,
+  InternalTableProps,
+  TableBaseProps,
+  TableProps,
+} from "./table.types";
 import { TableContextMenu } from "./table-context-menu";
+import type { DataTableFeatures } from "./table-features";
 import { TableHeaderSort } from "./table-header-sort";
-import { TableRowActions } from "./table-row-actions";
 import { useTable } from "./use-table";
 
-export function Table<TData, TValue>({
+export function Table<TData extends RowData, TValue>(props: TableProps<TData, TValue>) {
+  return props.table ? (
+    <TableWithExternalTable {...props} />
+  ) : (
+    <TableWithInternalTable {...props} />
+  );
+}
+
+function TableWithExternalTable<TData extends RowData, TValue>({
+  table,
+  ...props
+}: ExternalTableProps<TData, TValue>) {
+  return <TableContent table={table} {...props} />;
+}
+
+function TableWithInternalTable<TData extends RowData, TValue>({
   columns,
   data,
-  table: externalTable,
+  rowActions,
+  pageCount,
+  manualPagination,
+  manualSorting,
+  manualFiltering,
+  initialState,
+  transformQueryParams,
+  t,
+  ...props
+}: InternalTableProps<TData, TValue>) {
+  const finalColumns = (
+    rowActions ? [...columns, createActionsColumn(rowActions)] : columns
+  ) as Array<ColumnDef<DataTableFeatures, TData, unknown>>;
+
+  const { table } = useTable<TData, unknown>({
+    columns: finalColumns,
+    data,
+    pageCount,
+    manualPagination,
+    manualSorting,
+    manualFiltering,
+    initialState,
+    transformQueryParams,
+    t,
+  });
+
+  return <TableContent table={table} {...props} />;
+}
+
+function TableContent<TData extends RowData>({
+  table,
   loading = false,
   error = null,
-  rowActions,
-  rowActionsPlacement = "dropdown",
   contextMenu,
-  enableRowSelection = false,
   onRowClick,
   onRowDoubleClick,
   classNames,
   emptyMessage,
   renderToolbar,
   renderFooter,
-  ...useTableOptions
-}: TableProps<TData, TValue>) {
-  const finalColumns = rowActions
-    ? [
-        ...columns,
-        {
-          id: "actions",
-          cell: (props: { row: Row<TData> }) => {
-            return (
-              <div className="text-end">
-                <TableRowActions row={props.row} actions={rowActions} />
-              </div>
-            );
-          },
-        },
-      ]
-    : columns;
-
-  const internalTable = useTable<TData, TValue>({
-    columns: finalColumns,
-    data,
-    ...useTableOptions,
-  }).table;
-
-  const table = externalTable ?? internalTable;
+}: TableBaseProps<TData> & { table: DataTable<TData> }) {
   const t = getTableTranslator(table);
 
   return (

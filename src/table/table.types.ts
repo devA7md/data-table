@@ -1,22 +1,29 @@
 import type {
   ColumnDef,
   ColumnFiltersState,
+  ColumnVisibilityState,
   PaginationState,
+  ReactTable,
   Row,
   RowData,
   RowSelectionState,
   SortingState,
-  Table,
-  VisibilityState,
 } from "@tanstack/react-table";
 import type { Dispatch, ReactElement, ReactNode, SetStateAction } from "react";
 
 import type { TableTranslator } from "./localization";
+import type { DataTableFeatures } from "./table-features";
 import type { TableQueryParams } from "./table-query";
 
-export type RowAction<TData> = {
+/** A table instance built from the package's `dataTableFeatures`. */
+export type DataTable<TData extends RowData> = ReactTable<DataTableFeatures, TData>;
+
+/** A row instance produced by a `DataTable`. */
+export type DataTableRow<TData extends RowData> = Row<DataTableFeatures, TData>;
+
+export type RowAction<TData extends RowData> = {
   title: string;
-  onClick: (row: Row<TData>) => void;
+  onClick: (row: DataTableRow<TData>) => void;
   icon?: ReactElement;
   disabled?: boolean;
   hidden?: boolean;
@@ -29,8 +36,8 @@ export type TableFilterRenderProps = {
   close: () => void;
 };
 
-export type TableFilterRenderer<TData> = (
-  table: Table<TData>,
+export type TableFilterRenderer<TData extends RowData> = (
+  table: DataTable<TData>,
   props: TableFilterRenderProps,
 ) => ReactNode;
 
@@ -41,7 +48,7 @@ export interface TableToolbarProps<TData extends RowData> {
   renderFilter?: TableFilterRenderer<TData>;
   children?: ReactNode;
   debounceMs?: number;
-  table: Table<TData>;
+  table: DataTable<TData>;
 }
 
 export interface UseTableOptions<
@@ -49,7 +56,7 @@ export interface UseTableOptions<
   TValue,
   TQueryParams = Record<string, string>,
 > {
-  columns: ColumnDef<TData, TValue>[];
+  columns: ColumnDef<DataTableFeatures, TData, TValue>[];
   data: TData[] | undefined;
   pageCount?: number;
   manualPagination?: boolean;
@@ -59,8 +66,9 @@ export interface UseTableOptions<
     pagination?: Partial<PaginationState>;
     sorting?: SortingState;
     columnFilters?: ColumnFiltersState;
-    columnVisibility?: VisibilityState;
+    columnVisibility?: ColumnVisibilityState;
     rowSelection?: RowSelectionState;
+    globalFilter?: string;
   };
   transformQueryParams?: (params: TableQueryParams) => TQueryParams;
   /** Translation function exposed to all table components via table meta. */
@@ -68,13 +76,13 @@ export interface UseTableOptions<
 }
 
 export interface UseTableReturn<TData extends RowData> {
-  table: Table<TData>;
+  table: DataTable<TData>;
   sorting: SortingState;
   setSorting: Dispatch<SetStateAction<SortingState>>;
   columnFilters: ColumnFiltersState;
   setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>;
-  columnVisibility: VisibilityState;
-  setColumnVisibility: Dispatch<SetStateAction<VisibilityState>>;
+  columnVisibility: ColumnVisibilityState;
+  setColumnVisibility: Dispatch<SetStateAction<ColumnVisibilityState>>;
   rowSelection: RowSelectionState;
   setRowSelection: Dispatch<SetStateAction<RowSelectionState>>;
   globalFilter: string;
@@ -93,26 +101,45 @@ export type TableClassNames = {
   table?: string;
 };
 
-export interface TableProps<TData, TValue> extends UseTableOptions<TData, TValue> {
-  table?: Table<TData>;
+export interface TableBaseProps<TData extends RowData> {
   loading?: boolean;
   error?: string | null;
-  rowActions?: RowAction<TData>[] | ((row: TData) => RowAction<TData>[]);
-  rowActionsPlacement?: ActionPlacement;
   contextMenu?: RowAction<TData>[] | ((row: TData) => RowAction<TData>[]);
   enableRowSelection?: boolean;
-  onRowClick?: (row: Row<TData>) => void;
-  onRowDoubleClick?: (row: Row<TData>) => void;
+  onRowClick?: (row: DataTableRow<TData>) => void;
+  onRowDoubleClick?: (row: DataTableRow<TData>) => void;
   classNames?: TableClassNames;
   emptyMessage?: string;
-  renderToolbar?: (table: Table<TData>) => ReactNode;
-  renderFooter?: (table: Table<TData>) => ReactNode;
+  renderToolbar?: (table: DataTable<TData>) => ReactNode;
+  renderFooter?: (table: DataTable<TData>) => ReactNode;
 }
 
-export interface TableContextMenuProps<TData> {
+/** Renders a pre-built table instance; `data`/`columns` are not needed. */
+export type ExternalTableProps<TData extends RowData, TValue> = TableBaseProps<TData> & {
+  table: DataTable<TData>;
+  columns?: ColumnDef<DataTableFeatures, TData, TValue>[];
+  data?: TData[];
+};
+
+/**
+ * Builds the table internally; `data` and `columns` are required.
+ * `rowActions` is appended as a trailing actions column automatically.
+ */
+export type InternalTableProps<TData extends RowData, TValue> = TableBaseProps<TData> &
+  UseTableOptions<TData, TValue> & {
+    table?: undefined;
+    rowActions?: RowAction<TData>[] | ((row: TData) => RowAction<TData>[]);
+    rowActionsPlacement?: ActionPlacement;
+  };
+
+export type TableProps<TData extends RowData, TValue> =
+  | ExternalTableProps<TData, TValue>
+  | InternalTableProps<TData, TValue>;
+
+export interface TableContextMenuProps<TData extends RowData> {
   x: number;
   y: number;
-  row: Row<TData>;
+  row: DataTableRow<TData>;
   actions: RowAction<TData>[] | ((row: TData) => RowAction<TData>[]);
   onClose: () => void;
 }

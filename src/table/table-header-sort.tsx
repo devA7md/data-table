@@ -1,13 +1,16 @@
-import { flexRender, type Header } from "@tanstack/react-table";
+import { flexRender, type Header, type RowData } from "@tanstack/react-table";
 import { ChevronDownIcon, ChevronsUpDownIcon, ChevronUpIcon } from "lucide-react";
 
 import { getTableTranslator } from "./localization";
+import type { DataTableFeatures } from "./table-features";
 
-interface TableHeaderSortProps<TData, TValue> {
-  header: Header<TData, TValue>;
+interface TableHeaderSortProps<TData extends RowData, TValue> {
+  header: Header<DataTableFeatures, TData, TValue>;
 }
 
-export function TableHeaderSort<TData, TValue>({ header }: TableHeaderSortProps<TData, TValue>) {
+export function TableHeaderSort<TData extends RowData, TValue>({
+  header,
+}: TableHeaderSortProps<TData, TValue>) {
   const t = getTableTranslator(header.getContext().table);
 
   return (

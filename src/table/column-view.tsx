@@ -1,4 +1,4 @@
-import { flexRender, type Table } from "@tanstack/react-table";
+import { flexRender, type RowData } from "@tanstack/react-table";
 import { FoldHorizontalIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -13,12 +13,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { getTableTranslator } from "./localization";
+import type { DataTable } from "./table.types";
 
-interface ColumnViewProps<TData> {
-  table: Table<TData>;
+interface ColumnViewProps<TData extends RowData> {
+  table: DataTable<TData>;
 }
 
-export function ColumnView<TData>({ table }: ColumnViewProps<TData>) {
+export function ColumnView<TData extends RowData>({ table }: ColumnViewProps<TData>) {
   const t = getTableTranslator(table);
 
   // Resolve each column's header (what the table header shows) so labels here

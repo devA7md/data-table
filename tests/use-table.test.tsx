@@ -4,7 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { describe, expect, it } from "vitest";
 import { renderHook } from "vitest-browser-react";
 
-import { useTable } from "@/table/use-table";
+import { type DataTableFeatures, useTable } from "@/table";
 
 interface User {
   id: string;
@@ -17,7 +17,9 @@ const data: User[] = [
   { id: "3", name: "Maya" },
 ];
 
-const columns: ColumnDef<User, unknown>[] = [{ accessorKey: "name", header: "Name" }];
+const columns: ColumnDef<DataTableFeatures, User, unknown>[] = [
+  { accessorKey: "name", header: "Name" },
+];
 
 describe("useTable", () => {
   it("paginates the row model with the default page size", async () => {
