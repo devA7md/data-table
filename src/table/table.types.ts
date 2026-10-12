@@ -84,6 +84,15 @@ export interface UseTableReturn<TData extends RowData> {
   queryParams: Record<string, string>;
 }
 
+export type TableClassNames = {
+  /** Class for the outermost wrapper element. */
+  root?: string;
+  /** Class for the bordered wrapper around the table. */
+  wrapper?: string;
+  /** Class applied directly to the <table> element. */
+  table?: string;
+};
+
 export interface TableProps<TData, TValue> extends UseTableOptions<TData, TValue> {
   table?: Table<TData>;
   loading?: boolean;
@@ -94,7 +103,7 @@ export interface TableProps<TData, TValue> extends UseTableOptions<TData, TValue
   enableRowSelection?: boolean;
   onRowClick?: (row: Row<TData>) => void;
   onRowDoubleClick?: (row: Row<TData>) => void;
-  className?: string;
+  classNames?: TableClassNames;
   emptyMessage?: string;
   renderToolbar?: (table: Table<TData>) => ReactNode;
   renderFooter?: (table: Table<TData>) => ReactNode;

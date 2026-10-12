@@ -249,6 +249,9 @@ export function App() {
           />
         )}
         renderFooter={(table) => <DataTablePagination table={table} />}
+        classNames={{
+          wrapper: "overflow-hidden rounded-2xl bg-primary/5"
+        }}
       />
     </main>
   );

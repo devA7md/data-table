@@ -30,7 +30,7 @@ export function Table<TData, TValue>({
   enableRowSelection = false,
   onRowClick,
   onRowDoubleClick,
-  className,
+  classNames,
   emptyMessage,
   renderToolbar,
   renderFooter,
@@ -62,7 +62,7 @@ export function Table<TData, TValue>({
   const t = getTableTranslator(table);
 
   return (
-    <div className={cn("flex flex-col gap-4", className)}>
+    <div className={cn("flex flex-col gap-4", classNames?.root)}>
       {renderToolbar?.(table)}
 
       <div className="relative">
@@ -81,78 +81,85 @@ export function Table<TData, TValue>({
           </div>
         )}
 
-        <ShadcnTable className="w-full caption-bottom text-sm border border-border">
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder ? null : <TableHeaderSort header={header} />}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {error ? (
-              <TableRow>
-                <TableCell
-                  colSpan={table.getVisibleLeafColumns().length}
-                  className="text-destructive text-center"
-                >
-                  {error}
-                </TableCell>
-              </TableRow>
-            ) : table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => {
-                const finalContextMenuActions =
-                  typeof contextMenu === "function" ? contextMenu(row.original) : contextMenu;
-
-                const hasContextMenu =
-                  !!contextMenu &&
-                  !!finalContextMenuActions &&
-                  !finalContextMenuActions.every((action) => action.hidden);
-
-                const rowElement = (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    onClick={() => onRowClick?.(row)}
-                    onDoubleClick={() => onRowDoubleClick?.(row)}
-                    className={cn(onRowClick && "cursor-pointer")}
+        <div className={cn("border border-border", classNames?.wrapper)}>
+          <ShadcnTable className={cn("w-full caption-bottom text-sm", classNames?.table)}>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder ? null : <TableHeaderSort header={header} />}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {error ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={table.getVisibleLeafColumns().length}
+                    className="text-destructive text-center"
                   >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                );
+                    {error}
+                  </TableCell>
+                </TableRow>
+              ) : table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => {
+                  const finalContextMenuActions =
+                    typeof contextMenu === "function" ? contextMenu(row.original) : contextMenu;
 
-                if (!hasContextMenu) {
-                  return rowElement;
-                }
+                  const hasContextMenu =
+                    !!contextMenu &&
+                    !!finalContextMenuActions &&
+                    !finalContextMenuActions.every((action) => action.hidden);
 
-                return (
-                  <TableContextMenu key={row.id} row={row} actions={contextMenu} onClose={() => {}}>
-                    <ContextMenuTrigger render={rowElement}>
-                      {rowElement.props.children}
-                    </ContextMenuTrigger>
-                  </TableContextMenu>
-                );
-              })
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={table.getVisibleLeafColumns().length}
-                  className="h-24 text-center"
-                >
-                  {emptyMessage ?? t("no_results")}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </ShadcnTable>
+                  const rowElement = (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                      onClick={() => onRowClick?.(row)}
+                      onDoubleClick={() => onRowDoubleClick?.(row)}
+                      className={cn(onRowClick && "cursor-pointer")}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+
+                  if (!hasContextMenu) {
+                    return rowElement;
+                  }
+
+                  return (
+                    <TableContextMenu
+                      key={row.id}
+                      row={row}
+                      actions={contextMenu}
+                      onClose={() => {}}
+                    >
+                      <ContextMenuTrigger render={rowElement}>
+                        {rowElement.props.children}
+                      </ContextMenuTrigger>
+                    </TableContextMenu>
+                  );
+                })
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={table.getVisibleLeafColumns().length}
+                    className="h-24 text-center"
+                  >
+                    {emptyMessage ?? t("no_results")}
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </ShadcnTable>
+        </div>
       </div>
 
       {renderFooter?.(table)}
