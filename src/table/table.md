@@ -5,7 +5,7 @@ A generic, reusable React data table built on [TanStack Table 9](https://tanstac
 ## Installation
 
 ```bash
-npx shadcn@latest add https://github.com/devA7md/data-table/registry.json
+npx shadcn add devA7md/data-table/table
 ```
 
 ## Features
