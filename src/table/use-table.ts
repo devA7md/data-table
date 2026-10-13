@@ -3,7 +3,6 @@ import {
   type ColumnFiltersState,
   type ColumnVisibilityState,
   type ExpandedState,
-  functionalUpdate,
   type PaginationState,
   type RowData,
   type RowSelectionState,
@@ -24,28 +23,28 @@ export function useTable<TData extends RowData, TValue>({
   manualSorting = false,
   manualFiltering = false,
   initialState,
-  transformQueryParams,
   t,
 }: UseTableOptions<TData, TValue>): UseTableReturn<TData> {
   const [sorting, setSorting] = useState<SortingState>(
-    initialState?.sorting ?? [
-      {
-        id: "createdAt",
-        desc: true,
-      },
-    ],
+    initialState?.sorting ?? [{ id: "createdAt", desc: true }],
   );
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     initialState?.columnFilters ?? [],
   );
+
   const [columnVisibility, setColumnVisibility] = useState<ColumnVisibilityState>(
     initialState?.columnVisibility ?? {},
   );
+
   const [rowSelection, setRowSelection] = useState<RowSelectionState>(
     initialState?.rowSelection ?? {},
   );
+
   const [globalFilter, setGlobalFilter] = useState<string>(initialState?.globalFilter ?? "");
+
   const [expanded, setExpanded] = useState<ExpandedState>({});
+
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: initialState?.pagination?.pageIndex ?? 0,
     pageSize: initialState?.pagination?.pageSize ?? 10,
@@ -55,28 +54,15 @@ export function useTable<TData extends RowData, TValue>({
     features: dataTableFeatures,
     data: data ?? [],
     columns: columns as Array<ColumnDef<DataTableFeatures, TData, unknown>>,
-    onSortingChange: (updater) => {
-      const newSort = functionalUpdate(updater, sorting);
-      setSorting(newSort);
-    },
-    onPaginationChange: (updater) => {
-      const newPagination = functionalUpdate(updater, pagination);
-      setPagination(newPagination);
-    },
-    onColumnFiltersChange: (updater) => {
-      const newFilters = functionalUpdate(updater, columnFilters);
-      setColumnFilters(newFilters);
-    },
-    onColumnVisibilityChange: (updater) => {
-      const newColumnsVisibility = functionalUpdate(updater, columnVisibility);
-      setColumnVisibility(newColumnsVisibility);
-    },
-    onRowSelectionChange: (updater) => {
-      const newSelection = functionalUpdate(updater, rowSelection);
-      setRowSelection(newSelection);
-    },
+
+    onSortingChange: setSorting,
+    onPaginationChange: setPagination,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
     onExpandedChange: setExpanded,
     onGlobalFilterChange: setGlobalFilter,
+
     state: {
       sorting,
       columnFilters,
@@ -86,24 +72,27 @@ export function useTable<TData extends RowData, TValue>({
       pagination,
       expanded,
     },
+
     pageCount,
     manualPagination,
     manualSorting,
     manualFiltering,
+
     meta: {
       t,
     },
   });
 
-  const queryParams = useMemo(() => {
-    const raw = getTableQueryParams({
-      pagination,
-      sorting,
-      globalFilter,
-      columnFilters,
-    });
-    return (transformQueryParams ? transformQueryParams(raw) : raw) as Record<string, string>;
-  }, [columnFilters, globalFilter, pagination, sorting, transformQueryParams]);
+  const queryParams = useMemo(
+    () =>
+      getTableQueryParams({
+        pagination,
+        sorting,
+        globalFilter,
+        columnFilters,
+      }),
+    [pagination, sorting, globalFilter, columnFilters],
+  );
 
   return {
     table,

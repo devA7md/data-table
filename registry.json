@@ -38,6 +38,11 @@
           "target": "@components/ui/data-table/table.types.ts"
         },
         {
+          "path": "src/table/table.md",
+          "type": "registry:file",
+          "target": "@components/ui/data-table/table.md"
+        },
+        {
           "path": "src/table/localization.ts",
           "type": "registry:file",
           "target": "@components/ui/data-table/localization.ts"

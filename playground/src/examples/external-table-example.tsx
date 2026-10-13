@@ -62,8 +62,9 @@ export function ExternalTableExample({ lang }: { lang: Lang }) {
     data,
     t,
     initialState,
-    transformQueryParams,
     manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
     pageCount,
   });
 
@@ -72,7 +73,7 @@ export function ExternalTableExample({ lang }: { lang: Lang }) {
     setPageCount(total > 0 ? Math.ceil(total / pagination.pageSize) : -1);
   }, [total, pagination.pageSize]);
 
-  // Each page / page-size change fetches the matching slice from the server.
+  // Each page / page-size / sort / search change re-fetches from the server.
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
@@ -80,6 +81,9 @@ export function ExternalTableExample({ lang }: { lang: Lang }) {
       {
         skip: pagination.pageIndex * pagination.pageSize,
         limit: pagination.pageSize,
+        sortBy: queryParams.sort?.field,
+        order: queryParams.sort?.direction,
+        search: queryParams.search,
       },
       controller.signal,
     )
@@ -96,12 +100,12 @@ export function ExternalTableExample({ lang }: { lang: Lang }) {
         if (!controller.signal.aborted) setLoading(false);
       });
     return () => controller.abort();
-  }, [pagination.pageIndex, pagination.pageSize]);
+  }, [pagination.pageIndex, pagination.pageSize, queryParams.sort, queryParams.search]);
 
   // Reflect the current query params in the location URL (no navigation).
   useEffect(() => {
-    console.log("writing query params to URL", queryParams);
-    writeQueryParamsToUrl(queryParams);
+    const flatParams = transformQueryParams(queryParams);
+    writeQueryParamsToUrl(flatParams);
   }, [queryParams]);
 
   return (
@@ -121,7 +125,7 @@ export function ExternalTableExample({ lang }: { lang: Lang }) {
 
       <p className="text-muted-foreground text-xs">
         {labels[lang].queryParams}:{" "}
-        {Object.entries(queryParams)
+        {Object.entries(transformQueryParams(queryParams))
           .map(([key, value]) => `${key}=${value}`)
           .join("  ")}
       </p>

@@ -49,7 +49,6 @@ function TableWithInternalTable<TData extends RowData, TValue>({
   manualSorting,
   manualFiltering,
   initialState,
-  transformQueryParams,
   t,
   ...props
 }: InternalTableProps<TData, TValue>) {
@@ -65,7 +64,6 @@ function TableWithInternalTable<TData extends RowData, TValue>({
     manualSorting,
     manualFiltering,
     initialState,
-    transformQueryParams,
     t,
   });
 

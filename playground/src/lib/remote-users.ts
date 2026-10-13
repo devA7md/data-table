@@ -17,19 +17,43 @@ export interface RemoteUsersPage {
 
 const roles = ["admin", "editor", "viewer"] as const;
 
+/** Maps table column ids onto the DummyJSON field names they are derived from. */
+const sortableFields: Record<string, string> = {
+  name: "firstName",
+  email: "email",
+  createdAt: "birthDate",
+};
+
+export interface FetchRemoteUsersOptions {
+  skip: number;
+  limit: number;
+  sortBy?: string;
+  order?: "asc" | "desc";
+  search?: string;
+}
+
 /**
  * Fetches one page of users from DummyJSON and maps them onto the
  * playground's User shape. `skip`/`limit` mirror the table's pagination
- * state so each page change triggers a new request.
+ * state, `sortBy`/`order` its sorting state, and `search` its global filter,
+ * so every state change triggers a new request.
  */
 export async function fetchRemoteUsersPage(
-  { skip, limit }: { skip: number; limit: number },
+  { skip, limit, sortBy, order, search }: FetchRemoteUsersOptions,
   signal?: AbortSignal,
 ): Promise<RemoteUsersPage> {
-  const response = await fetch(
-    `https://dummyjson.com/users?limit=${limit}&skip=${skip}&select=firstName,lastName,email,birthDate`,
-    { signal },
-  );
+  const params = new URLSearchParams({ limit: String(limit), skip: String(skip) });
+  params.set("select", "firstName,lastName,email,birthDate");
+  const field = sortBy ? sortableFields[sortBy] : undefined;
+  if (field) {
+    params.set("sortBy", field);
+    params.set("order", order ?? "asc");
+  }
+  if (search) {
+    params.set("q", search);
+  }
+
+  const response = await fetch(`https://dummyjson.com/users?${params.toString()}`, { signal });
   if (!response.ok) {
     throw new Error(`Request failed with ${response.status}`);
   }

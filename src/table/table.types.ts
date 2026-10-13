@@ -51,11 +51,7 @@ export interface TableToolbarProps<TData extends RowData> {
   table: DataTable<TData>;
 }
 
-export interface UseTableOptions<
-  TData extends RowData,
-  TValue,
-  TQueryParams = Record<string, string>,
-> {
+export interface UseTableOptions<TData extends RowData, TValue> {
   columns: ColumnDef<DataTableFeatures, TData, TValue>[];
   data: TData[] | undefined;
   pageCount?: number;
@@ -70,7 +66,6 @@ export interface UseTableOptions<
     rowSelection?: RowSelectionState;
     globalFilter?: string;
   };
-  transformQueryParams?: (params: TableQueryParams) => TQueryParams;
   /** Translation function exposed to all table components via table meta. */
   t?: TableTranslator;
 }
@@ -89,7 +84,7 @@ export interface UseTableReturn<TData extends RowData> {
   setGlobalFilter: Dispatch<SetStateAction<string>>;
   pagination: PaginationState;
   setPagination: Dispatch<SetStateAction<PaginationState>>;
-  queryParams: Record<string, string>;
+  queryParams: TableQueryParams;
 }
 
 export type TableClassNames = {

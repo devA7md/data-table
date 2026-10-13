@@ -76,7 +76,7 @@ See [playground/src/App.tsx](playground/src/App.tsx) for a complete example with
 
 ### Server-side mode
 
-Enable the manual flags and consume `queryParams` to drive your API:
+Enable the manual flags and consume `queryParams` to drive your API — it's a `TableQueryParams` object (`page`, `pageSize`, `sort`, `search`, `filters`) that you can shape however your API expects:
 
 ```tsx
 const { table, queryParams } = useTable<User, unknown>({
@@ -86,16 +86,18 @@ const { table, queryParams } = useTable<User, unknown>({
   manualPagination: true,
   manualSorting: true,
   manualFiltering: true,
-  transformQueryParams: (params) => ({
-    page: String(params.page),
-    per_page: String(params.pageSize),
-    sort: params.sort ? `${params.sort.field}.${params.sort.direction}` : "",
-    q: params.search,
-  }),
 });
-```
 
-Without `transformQueryParams`, `queryParams` is a flat `Record<string, string>` suitable for a query string.
+useEffect(() => {
+  fetchUsers({
+    page: queryParams.page,
+    per_page: queryParams.pageSize,
+    sort: queryParams.sort && `${queryParams.sort.field}.${queryParams.sort.direction}`,
+    q: queryParams.search,
+    filters: queryParams.filters,
+  });
+}, [queryParams]);
+```
 
 ### Localization
 
