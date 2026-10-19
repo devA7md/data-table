@@ -80,13 +80,29 @@ function TableContent<TData extends RowData>({
   classNames,
   emptyMessage,
   renderToolbar,
+  renderSelectedRowActions,
   renderFooter,
 }: TableBaseProps<TData> & { table: DataTable<TData> }) {
   const t = getTableTranslator(table);
+  const selectedRows = table.getSelectedRowModel().rows;
 
   return (
     <div className={cn("flex flex-col gap-4", classNames?.root)}>
-      {renderToolbar?.(table)}
+      {renderSelectedRowActions && selectedRows.length > 0 ? (
+        <div className="flex h-12 shrink-0 items-center justify-between">
+          <span className="text-sm font-medium">
+            {t("selected_count", { count: selectedRows.length })}
+          </span>
+          <div className="flex items-center gap-2">
+            {renderSelectedRowActions({
+              selectedRowIds: selectedRows.map((r) => r.original),
+              clearSelection: () => table.resetRowSelection(),
+            })}
+          </div>
+        </div>
+      ) : (
+        renderToolbar?.(table)
+      )}
 
       <div className="relative">
         {loading && (

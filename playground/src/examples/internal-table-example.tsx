@@ -6,6 +6,7 @@ import type { User } from "../data/users";
 import { type Lang, useTranslator } from "../lib/i18n";
 import {
   createRoleFilterRenderer,
+  createSelectedRowActions,
   createUserColumns,
   createUserRowActions,
 } from "../lib/user-table";
@@ -19,6 +20,7 @@ export function InternalTableExample({ lang, data }: { lang: Lang; data: User[] 
   const columns = useMemo(() => createUserColumns(lang), [lang]);
   const rowActions = useMemo(() => createUserRowActions(lang), [lang]);
   const renderRoleFilter = useMemo(() => createRoleFilterRenderer(lang), [lang]);
+  const renderSelectedRowActions = useMemo(() => createSelectedRowActions(lang), [lang]);
 
   return (
     <Table<User, unknown>
@@ -30,6 +32,7 @@ export function InternalTableExample({ lang, data }: { lang: Lang; data: User[] 
       enableRowSelection
       onRowClick={(row) => console.log("row click", row.original)}
       renderToolbar={(table) => <TableToolbar table={table} renderFilter={renderRoleFilter} />}
+      renderSelectedRowActions={renderSelectedRowActions}
       renderFooter={(table) => <DataTablePagination table={table} />}
       classNames={{
         wrapper: "overflow-hidden rounded-2xl bg-primary/5",

@@ -1,7 +1,14 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { ReactNode } from "react";
 
-import type { DataTableFeatures, DataTableRow, RowAction, TableFilterRenderer } from "@/table";
+import { Button } from "@/components/ui/button";
+import type {
+  DataTableFeatures,
+  DataTableRow,
+  RowAction,
+  TableBaseProps,
+  TableFilterRenderer,
+} from "@/table";
 
 import type { User } from "../data/users";
 import { type Lang, labels } from "./i18n";
@@ -64,6 +71,8 @@ export function createUserRowActions(lang: Lang): (row: User) => RowAction<User>
       title: labels[lang].actions.reset,
       onClick: (r) => console.log("reset", r.original),
       divider: true,
+      disabled: row.status === "disabled",
+      disabledTooltip: labels[lang].resetDisabledTooltip,
     },
     {
       title: labels[lang].actions.disable,
@@ -71,6 +80,33 @@ export function createUserRowActions(lang: Lang): (row: User) => RowAction<User>
       hidden: row.status === "disabled",
     },
   ];
+}
+
+/** Bulk-action bar shown by the table while rows are selected. */
+export function createSelectedRowActions(
+  lang: Lang,
+): NonNullable<TableBaseProps<User>["renderSelectedRowActions"]> {
+  return ({ selectedRowIds, clearSelection }) => (
+    <>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => console.log("delete selected", selectedRowIds)}
+      >
+        {labels[lang].bulkDelete}
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => console.log("export selected", selectedRowIds)}
+      >
+        {labels[lang].bulkExport}
+      </Button>
+      <Button variant="ghost" size="sm" onClick={clearSelection}>
+        ✕
+      </Button>
+    </>
+  );
 }
 
 /** Role radio-group filter shared by the toolbar filter popover in each example. */

@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 import type { DataTableRow, RowAction } from "./table.types";
 
@@ -29,16 +30,33 @@ export function TableRowActions<TData extends RowData>({
         <MoreVertical className="h-4 w-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {finalActions.map((action) => (
-          <DropdownMenuItem
-            key={action.title}
-            disabled={action.disabled}
-            onClick={() => action.onClick(row)}
-          >
-            {action.icon}
-            {action.title}
-          </DropdownMenuItem>
-        ))}
+        {finalActions.map((action) => {
+          const item = (
+            <DropdownMenuItem
+              key={action.title}
+              disabled={action.disabled}
+              onClick={() => action.onClick(row)}
+            >
+              {action.icon}
+              {action.title}
+            </DropdownMenuItem>
+          );
+
+          // Base UI tooltips need a non-disabled trigger, so wrap the disabled
+          // item in a plain span that can receive pointer events.
+          if (action.disabled && action.disabledTooltip) {
+            return (
+              <Tooltip key={action.title}>
+                <TooltipTrigger render={<span className="block" />}>
+                  {item}
+                </TooltipTrigger>
+                <TooltipContent>{action.disabledTooltip}</TooltipContent>
+              </Tooltip>
+            );
+          }
+
+          return item;
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -19,6 +19,7 @@ export const messages: Record<Lang, Record<TableMessageKey, string>> = {
     clear_sort: "Clear sort",
     search_placeholder: "Search...",
     no_results: "No results.",
+    selected_count: "{count} selected",
   },
   ar: {
     columns: "الأعمدة",
@@ -34,6 +35,7 @@ export const messages: Record<Lang, Record<TableMessageKey, string>> = {
     clear_sort: "إزالة الترتيب",
     search_placeholder: "بحث...",
     no_results: "لا توجد نتائج.",
+    selected_count: "تم تحديد {count}",
   },
 };
 
@@ -49,6 +51,9 @@ export const labels: Record<
     externalSubheading: string;
     columns: Record<"name" | "email" | "role" | "status" | "createdAt", string>;
     actions: Record<"view" | "edit" | "reset" | "disable", string>;
+    resetDisabledTooltip: string;
+    bulkDelete: string;
+    bulkExport: string;
     roles: Record<"admin" | "editor" | "viewer", string>;
     clearFilter: string;
     queryParams: string;
@@ -77,6 +82,9 @@ export const labels: Record<
       reset: "Reset password",
       disable: "Disable user",
     },
+    resetDisabledTooltip: "Password reset is unavailable for disabled users",
+    bulkDelete: "Delete selected",
+    bulkExport: "Export selected",
     roles: { admin: "Admin", editor: "Editor", viewer: "Viewer" },
     clearFilter: "Clear filter",
     queryParams: "Query params",
@@ -103,6 +111,9 @@ export const labels: Record<
       reset: "إعادة تعيين كلمة المرور",
       disable: "تعطيل المستخدم",
     },
+    resetDisabledTooltip: "إعادة تعيين كلمة المرور غير متاحة للمستخدمين المعطلين",
+    bulkDelete: "حذف المحدد",
+    bulkExport: "تصدير المحدد",
     roles: { admin: "مدير", editor: "محرر", viewer: "مشاهد" },
     clearFilter: "مسح الفلتر",
     queryParams: "معاملات الاستعلام",
@@ -119,9 +130,8 @@ export function interpolate(template: string, params?: Record<string, string | n
 
 /** Returns the table translator for the current language, re-created when the language changes. */
 export function useTranslator(lang: Lang): TableTranslator {
-  return useCallback(
-    (key: TableMessageKey, params?: Record<string, string | number>) =>
-      interpolate(messages[lang][key], params),
+  return useCallback<TableTranslator>(
+    (key, params) => interpolate(messages[lang][key as TableMessageKey] ?? key, params),
     [lang],
   );
 }

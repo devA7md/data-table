@@ -28,6 +28,8 @@ export type RowAction<TData extends RowData> = {
   disabled?: boolean;
   hidden?: boolean;
   divider?: boolean;
+  /** Tooltip shown when the action is disabled. */
+  disabledTooltip?: string;
 };
 
 export type ActionPlacement = "dropdown" | "context-menu" | "both";
@@ -106,6 +108,11 @@ export interface TableBaseProps<TData extends RowData> {
   classNames?: TableClassNames;
   emptyMessage?: string;
   renderToolbar?: (table: DataTable<TData>) => ReactNode;
+  /** Renders a bulk-action bar (with selected count) while rows are selected. */
+  renderSelectedRowActions?: (props: {
+    selectedRowIds: TData[];
+    clearSelection: () => void;
+  }) => ReactNode;
   renderFooter?: (table: DataTable<TData>) => ReactNode;
 }
 

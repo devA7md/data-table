@@ -16,7 +16,7 @@ import {
   readTableStateFromUrl,
   writeQueryParamsToUrl,
 } from "../lib/remote-users";
-import { createUserColumns, createUserRowActions } from "../lib/user-table";
+import { createSelectedRowActions, createUserColumns, createUserRowActions } from "../lib/user-table";
 
 /** Flattens the table query params into a string map that fits a URL. */
 function transformQueryParams(params: TableQueryParams): Record<string, string> {
@@ -43,6 +43,7 @@ function transformQueryParams(params: TableQueryParams): Record<string, string> 
 export function ExternalTableExample({ lang }: { lang: Lang }) {
   const t = useTranslator(lang);
   const rowActions = useMemo(() => createUserRowActions(lang), [lang]);
+  const renderSelectedRowActions = useMemo(() => createSelectedRowActions(lang), [lang]);
   const columns = useMemo(
     () => [...createUserColumns(lang), createActionsColumn(rowActions)],
     [lang, rowActions],
@@ -117,6 +118,7 @@ export function ExternalTableExample({ lang }: { lang: Lang }) {
         contextMenu={rowActions}
         onRowClick={(row) => console.log("row click", row.original)}
         renderToolbar={(table) => <TableToolbar table={table} showColumnView={false} />}
+        renderSelectedRowActions={renderSelectedRowActions}
         renderFooter={(table) => <DataTablePagination table={table} />}
         classNames={{
           wrapper: "overflow-hidden rounded-2xl bg-primary/5",
