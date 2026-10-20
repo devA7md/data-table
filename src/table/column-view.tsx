@@ -16,9 +16,10 @@ import type { DataTable } from "./table.types";
 
 interface ColumnViewProps<TData extends RowData> {
   table: DataTable<TData>;
+  triggerClassName?: string;
 }
 
-export function ColumnView<TData extends RowData>({ table }: ColumnViewProps<TData>) {
+export function ColumnView<TData extends RowData>({ table, triggerClassName }: ColumnViewProps<TData>) {
   const t = getTableTranslator(table);
 
   // Resolve each column's header (what the table header shows) so labels here
@@ -36,8 +37,9 @@ export function ColumnView<TData extends RowData>({ table }: ColumnViewProps<TDa
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
+        className={triggerClassName}
         render={
-          <div className="hidden sm:flex sm:items-center sm:gap-2 border border-border rounded-xl cursor-pointer hover:bg-primary/5 p-1 h-8" />
+          <div className="hidden sm:flex sm:items-center sm:gap-2 border border-border rounded-md cursor-pointer hover:bg-primary/5 p-1 h-8" />
         }
       >
         <FoldHorizontalIcon size="14" />

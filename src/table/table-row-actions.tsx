@@ -26,7 +26,7 @@ export function TableRowActions<TData extends RowData>({
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <div className="h-8 w-8 p-0 border border-border rounded-full flex items-center justify-center hover:bg-primary/5" />
+          <div className="h-8 w-8 p-0 border border-border rounded-full flex items-center justify-center hover:bg-primary/5 cursor-pointer" />
         }
       >
         <span className="sr-only">Open menu</span>

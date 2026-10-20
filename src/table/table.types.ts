@@ -57,6 +57,7 @@ export interface TableToolbarProps<TData extends RowData> {
   children?: ReactNode;
   debounceMs?: number;
   table: DataTable<TData>;
+  columnViewTriggerClassName?: string;
 }
 
 export interface UseTableOptions<TData extends RowData, TValue> {

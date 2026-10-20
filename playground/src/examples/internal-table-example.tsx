@@ -40,6 +40,7 @@ export function InternalTableExample({ lang, data }: { lang: Lang; data: User[] 
           // Only user-applied role filters mark the filter as active,
           // the predefined status filter does not.
           hasActiveFilters={table.state.columnFilters.some((f) => f.id === "role")}
+          columnViewTriggerClassName="bg-primary/10 p-3 rounded-xssm"
         />
       )}
       renderSelectedRowActions={renderSelectedRowActions}

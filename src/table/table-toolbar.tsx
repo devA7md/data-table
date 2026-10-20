@@ -14,6 +14,7 @@ export function TableToolbar<TData extends RowData>({
   children,
   table,
   debounceMs = 300,
+  columnViewTriggerClassName,
 }: TableToolbarProps<TData>) {
   return (
     <div className="flex items-center justify-between">
@@ -27,12 +28,18 @@ export function TableToolbar<TData extends RowData>({
           />
         )}
         {renderFilter && (
-          <TableFilter table={table} renderFilter={renderFilter} hasActiveFilters={hasActiveFilters} />
+          <TableFilter
+            table={table}
+            renderFilter={renderFilter}
+            hasActiveFilters={hasActiveFilters}
+          />
         )}
         {children}
       </div>
 
-      {showColumnView && <ColumnView<TData> table={table} />}
+      {showColumnView && (
+        <ColumnView<TData> table={table} triggerClassName={columnViewTriggerClassName} />
+      )}
     </div>
   );
 }
