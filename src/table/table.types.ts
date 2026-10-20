@@ -48,6 +48,12 @@ export interface TableToolbarProps<TData extends RowData> {
   showColumnView?: boolean;
   showSearch?: boolean;
   renderFilter?: TableFilterRenderer<TData>;
+  /**
+   * Controls the filter indicator dot. Defaults to true when any column
+   * filters are applied. Pass your own predicate when the table ships with
+   * predefined filters that shouldn't mark the filter as active.
+   */
+  hasActiveFilters?: boolean;
   children?: ReactNode;
   debounceMs?: number;
   table: DataTable<TData>;

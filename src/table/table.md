@@ -160,6 +160,17 @@ Actions appear as a trailing dropdown column (and/or as a context menu):
 />
 ```
 
+The filter icon shows an indicator dot once any column filter is applied. If the table ships with predefined filters (e.g. via `initialState`) that shouldn't count, pass your own predicate:
+
+```tsx
+<TableToolbar
+  table={table}
+  renderFilter={renderFilter}
+  // Only user-applied filters mark the filter as active.
+  hasActiveFilters={table.state.columnFilters.some((f) => f.id === "role")}
+/>
+```
+
 ## Row selection
 
 ```tsx

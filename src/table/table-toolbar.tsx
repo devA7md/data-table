@@ -10,6 +10,7 @@ export function TableToolbar<TData extends RowData>({
   showColumnView = true,
   showSearch = true,
   renderFilter,
+  hasActiveFilters,
   children,
   table,
   debounceMs = 300,
@@ -25,7 +26,9 @@ export function TableToolbar<TData extends RowData>({
             className="flex-1"
           />
         )}
-        {renderFilter && <TableFilter table={table} renderFilter={renderFilter} />}
+        {renderFilter && (
+          <TableFilter table={table} renderFilter={renderFilter} hasActiveFilters={hasActiveFilters} />
+        )}
         {children}
       </div>
 

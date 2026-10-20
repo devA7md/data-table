@@ -9,15 +9,17 @@ import type { DataTable, TableFilterRenderer } from "./table.types";
 type TableFilterProps<TData extends RowData> = {
   table: DataTable<TData>;
   renderFilter: TableFilterRenderer<TData>;
+  hasActiveFilters?: boolean;
 };
 
 export function TableFilter<TData extends RowData>({
   table,
   renderFilter,
+  hasActiveFilters,
 }: TableFilterProps<TData>) {
   const [open, setOpen] = useState(false);
 
-  const hasFilters = table.state.columnFilters.length > 0;
+  const hasFilters = hasActiveFilters ?? table.state.columnFilters.length > 0;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

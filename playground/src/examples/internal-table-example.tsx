@@ -31,7 +31,17 @@ export function InternalTableExample({ lang, data }: { lang: Lang; data: User[] 
       contextMenu={rowActions}
       enableRowSelection
       onRowClick={(row) => console.log("row click", row.original)}
-      renderToolbar={(table) => <TableToolbar table={table} renderFilter={renderRoleFilter} />}
+      // Predefined filter applied on load — excluded from the indicator below.
+      initialState={{ columnFilters: [{ id: "status", value: "active" }] }}
+      renderToolbar={(table) => (
+        <TableToolbar
+          table={table}
+          renderFilter={renderRoleFilter}
+          // Only user-applied role filters mark the filter as active,
+          // the predefined status filter does not.
+          hasActiveFilters={table.state.columnFilters.some((f) => f.id === "role")}
+        />
+      )}
       renderSelectedRowActions={renderSelectedRowActions}
       renderFooter={(table) => <DataTablePagination table={table} />}
       classNames={{
