@@ -1,7 +1,6 @@
 import { flexRender, type RowData } from "@tanstack/react-table";
 import { FoldHorizontalIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -37,7 +36,9 @@ export function ColumnView<TData extends RowData>({ table }: ColumnViewProps<TDa
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={<Button variant="outline" size="sm" className="hidden h-8 sm:flex sm:gap-2" />}
+        render={
+          <div className="hidden sm:flex sm:items-center sm:gap-2 border border-border rounded-xl cursor-pointer hover:bg-primary/5 p-1 h-8" />
+        }
       >
         <FoldHorizontalIcon size="14" />
         {t("columns")}

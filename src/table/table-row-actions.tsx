@@ -1,7 +1,6 @@
 import type { RowData } from "@tanstack/react-table";
 import { MoreVertical } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,7 +24,11 @@ export function TableRowActions<TData extends RowData>({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger render={<Button variant="ghost" className="h-8 w-8 p-0" />}>
+      <DropdownMenuTrigger
+        render={
+          <div className="h-8 w-8 p-0 border border-border rounded-full flex items-center justify-center hover:bg-primary/5" />
+        }
+      >
         <span className="sr-only">Open menu</span>
         <MoreVertical className="h-4 w-4" />
       </DropdownMenuTrigger>
@@ -47,9 +50,7 @@ export function TableRowActions<TData extends RowData>({
           if (action.disabled && action.disabledTooltip) {
             return (
               <Tooltip key={action.title}>
-                <TooltipTrigger render={<span className="block" />}>
-                  {item}
-                </TooltipTrigger>
+                <TooltipTrigger render={<span className="block" />}>{item}</TooltipTrigger>
                 <TooltipContent>{action.disabledTooltip}</TooltipContent>
               </Tooltip>
             );
