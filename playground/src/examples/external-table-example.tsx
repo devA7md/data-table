@@ -123,6 +123,7 @@ export function ExternalTableExample({ lang }: { lang: Lang }) {
         classNames={{
           wrapper: "overflow-hidden rounded-2xl bg-primary/5",
         }}
+        size="large"
       />
 
       <p className="text-muted-foreground text-xs">

@@ -19,6 +19,7 @@ import type {
   InternalTableProps,
   TableBaseProps,
   TableProps,
+  TableSize,
 } from "./table.types";
 import { TableContextMenu } from "./table-context-menu";
 import type { DataTableFeatures } from "./table-features";
@@ -70,6 +71,25 @@ function TableWithInternalTable<TData extends RowData, TValue>({
   return <TableContent table={table} {...props} />;
 }
 
+const sizeClasses: Record<
+  TableSize,
+  { root?: string; table?: string; head?: string; cell?: string }
+> = {
+  dense: {
+    root: "text-xs",
+    table: "text-xs",
+    head: "h-8 px-2 text-xs",
+    cell: "px-2 py-0",
+  },
+  normal: {},
+  large: {
+    root: "text-base",
+    table: "text-base",
+    head: "h-14 px-4 text-base",
+    cell: "p-4",
+  },
+};
+
 function TableContent<TData extends RowData>({
   table,
   loading = false,
@@ -79,32 +99,36 @@ function TableContent<TData extends RowData>({
   onRowDoubleClick,
   classNames,
   emptyMessage,
+  size = "normal",
   renderToolbar,
   renderSelectedRowActions,
   renderFooter,
 }: TableBaseProps<TData> & { table: DataTable<TData> }) {
   const t = getTableTranslator(table);
   const selectedRows = table.getSelectedRowModel().rows;
+  const density = sizeClasses[size];
 
   return (
-    <div className={cn("flex flex-col gap-4", classNames?.root)}>
-      {renderSelectedRowActions && selectedRows.length > 0 ? (
-        <div className="flex h-12 shrink-0 items-center justify-between">
-          <span className="text-sm font-medium">
-            {t("selected_count", { count: selectedRows.length })}
-          </span>
-          <div className="flex items-center gap-2">
-            {renderSelectedRowActions({
-              selectedRowIds: selectedRows.map((r) => r.original),
-              clearSelection: () => table.resetRowSelection(),
-            })}
+    <div className={cn("flex flex-col gap-4 min-h-0", density.root, classNames?.root)}>
+      <div className="h-10 flex items-center [&>*:first-child]:w-full">
+        {renderSelectedRowActions && selectedRows.length > 0 ? (
+          <div className="flex items-center justify-between">
+            <span className="font-medium">
+              {t("selected_count", { count: selectedRows.length })}
+            </span>
+            <div className="flex items-center gap-2">
+              {renderSelectedRowActions({
+                selectedRowIds: selectedRows.map((r) => r.original),
+                clearSelection: () => table.resetRowSelection(),
+              })}
+            </div>
           </div>
-        </div>
-      ) : (
-        renderToolbar?.(table)
-      )}
+        ) : (
+          renderToolbar?.(table)
+        )}
+      </div>
 
-      <div className="relative">
+      <div className="relative overflow-y-auto">
         {loading && (
           <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-1 overflow-hidden bg-muted">
             <div
@@ -121,12 +145,14 @@ function TableContent<TData extends RowData>({
         )}
 
         <div className={cn("border border-border", classNames?.wrapper)}>
-          <ShadcnTable className={cn("w-full caption-bottom text-sm", classNames?.table)}>
+          <ShadcnTable
+            className={cn("w-full caption-bottom text-sm", density.table, classNames?.table)}
+          >
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className={density.head}>
                       {header.isPlaceholder ? null : <TableHeaderSort header={header} />}
                     </TableHead>
                   ))}
@@ -162,7 +188,7 @@ function TableContent<TData extends RowData>({
                       className={cn(onRowClick && "cursor-pointer")}
                     >
                       {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
+                        <TableCell key={cell.id} className={density.cell}>
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </TableCell>
                       ))}

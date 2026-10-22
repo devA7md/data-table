@@ -46,8 +46,10 @@ export function InternalTableExample({ lang, data }: { lang: Lang; data: User[] 
       renderSelectedRowActions={renderSelectedRowActions}
       renderFooter={(table) => <DataTablePagination table={table} />}
       classNames={{
+        root: "h-100",
         wrapper: "overflow-hidden rounded-2xl bg-primary/5",
       }}
+      size="dense"
     />
   );
 }

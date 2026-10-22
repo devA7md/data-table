@@ -105,9 +105,19 @@ export type TableClassNames = {
   table?: string;
 };
 
+/** Visual density of the table: row height, cell padding and text size. */
+export type TableSize = "dense" | "normal" | "large";
+
 export interface TableBaseProps<TData extends RowData> {
   loading?: boolean;
   error?: string | null;
+  /**
+   * Visual density of the table. Defaults to "normal".
+   * - `dense`: smaller text and tighter padding for data-heavy views
+   * - `normal`: default sizing
+   * - `large`: larger text and roomier rows
+   */
+  size?: TableSize;
   contextMenu?: RowAction<TData>[] | ((row: TData) => RowAction<TData>[]);
   enableRowSelection?: boolean;
   onRowClick?: (row: DataTableRow<TData>) => void;
