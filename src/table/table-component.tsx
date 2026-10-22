@@ -76,14 +76,14 @@ const sizeClasses: Record<
   { root?: string; table?: string; head?: string; cell?: string }
 > = {
   dense: {
-    root: "text-xs",
+    root: "text-xs gap-2",
     table: "text-xs",
     head: "h-8 px-2 text-xs",
     cell: "px-2 py-0",
   },
   normal: {},
   large: {
-    root: "text-base",
+    root: "text-base gap-2",
     table: "text-base",
     head: "h-14 px-4 text-base",
     cell: "p-4",
@@ -110,23 +110,25 @@ function TableContent<TData extends RowData>({
 
   return (
     <div className={cn("flex flex-col gap-4 min-h-0", density.root, classNames?.root)}>
-      <div className="h-10 flex items-center [&>*:first-child]:w-full">
-        {renderSelectedRowActions && selectedRows.length > 0 ? (
-          <div className="flex items-center justify-between">
-            <span className="font-medium">
-              {t("selected_count", { count: selectedRows.length })}
-            </span>
-            <div className="flex items-center gap-2">
-              {renderSelectedRowActions({
-                selectedRowIds: selectedRows.map((r) => r.original),
-                clearSelection: () => table.resetRowSelection(),
-              })}
+      {(renderSelectedRowActions || renderToolbar) && (
+        <div className="h-10 flex items-center [&>*:first-child]:w-full">
+          {renderSelectedRowActions && selectedRows.length > 0 ? (
+            <div className="flex items-center justify-between">
+              <span className="font-medium">
+                {t("selected_count", { count: selectedRows.length })}
+              </span>
+              <div className="flex items-center gap-2">
+                {renderSelectedRowActions({
+                  selectedRowIds: selectedRows.map((r) => r.original),
+                  clearSelection: () => table.resetRowSelection(),
+                })}
+              </div>
             </div>
-          </div>
-        ) : (
-          renderToolbar?.(table)
-        )}
-      </div>
+          ) : (
+            renderToolbar?.(table)
+          )}
+        </div>
+      )}
 
       <div className="relative overflow-y-auto">
         {loading && (
