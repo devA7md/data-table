@@ -19,7 +19,10 @@ interface ColumnViewProps<TData extends RowData> {
   triggerClassName?: string;
 }
 
-export function ColumnView<TData extends RowData>({ table, triggerClassName }: ColumnViewProps<TData>) {
+export function ColumnView<TData extends RowData>({
+  table,
+  triggerClassName,
+}: ColumnViewProps<TData>) {
   const t = getTableTranslator(table);
 
   // Resolve each column's header (what the table header shows) so labels here

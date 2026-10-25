@@ -2,6 +2,7 @@ import {
   columnFilteringFeature,
   columnVisibilityFeature,
   createCoreRowModel,
+  createExpandedRowModel,
   createFilteredRowModel,
   createPaginatedRowModel,
   createSortedRowModel,
@@ -27,11 +28,13 @@ export const dataTableFeatures = tableFeatures({
   columnVisibilityFeature,
   rowSelectionFeature,
   rowExpandingFeature,
+
   coreRowModel: createCoreRowModel(),
   sortedRowModel: createSortedRowModel(),
   filteredRowModel: createFilteredRowModel(),
   paginatedRowModel: createPaginatedRowModel(),
-  /** Type-only slot: the translator exposed to all table components via `meta`. */
+  expandedRowModel: createExpandedRowModel(),
+
   tableMeta: {} as { t?: TableTranslator },
 });
 

@@ -1,4 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,23 @@ const roleFilter = (row: DataTableRow<User>, _columnId: string, filterValue: unk
 
 export function createUserColumns(lang: Lang): ColumnDef<DataTableFeatures, User, unknown>[] {
   return [
+    {
+      id: "expand",
+      header: () => null,
+      cell: ({ row }) => (
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={row.getToggleExpandedHandler()}
+          aria-expanded={row.getIsExpanded()}
+          aria-label={row.getIsExpanded() ? "Collapse row" : "Expand row"}
+        >
+          {row.getIsExpanded() ? <ChevronDown /> : <ChevronRight />}
+        </Button>
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
     {
       id: "select",
       header: ({ table }) => (

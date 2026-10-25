@@ -22,6 +22,10 @@ export function useTable<TData extends RowData, TValue>({
   manualPagination = false,
   manualSorting = false,
   manualFiltering = false,
+  manualExpanding = false,
+  getRowCanExpand,
+  getSubRows,
+  paginateExpandedRows,
   initialState,
   t,
 }: UseTableOptions<TData, TValue>): UseTableReturn<TData> {
@@ -43,7 +47,7 @@ export function useTable<TData extends RowData, TValue>({
 
   const [globalFilter, setGlobalFilter] = useState<string>(initialState?.globalFilter ?? "");
 
-  const [expanded, setExpanded] = useState<ExpandedState>({});
+  const [expanded, setExpanded] = useState<ExpandedState>(initialState?.expanded ?? {});
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: initialState?.pagination?.pageIndex ?? 0,
@@ -77,6 +81,10 @@ export function useTable<TData extends RowData, TValue>({
     manualPagination,
     manualSorting,
     manualFiltering,
+    manualExpanding,
+    getRowCanExpand,
+    getSubRows,
+    paginateExpandedRows,
 
     meta: {
       t,
@@ -108,6 +116,8 @@ export function useTable<TData extends RowData, TValue>({
     setGlobalFilter,
     pagination,
     setPagination,
+    expanded,
+    setExpanded,
     queryParams,
   };
 }

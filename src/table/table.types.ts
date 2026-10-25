@@ -2,6 +2,7 @@ import type {
   ColumnDef,
   ColumnFiltersState,
   ColumnVisibilityState,
+  ExpandedState,
   PaginationState,
   ReactTable,
   Row,
@@ -67,6 +68,7 @@ export interface UseTableOptions<TData extends RowData, TValue> {
   manualPagination?: boolean;
   manualSorting?: boolean;
   manualFiltering?: boolean;
+  manualExpanding?: boolean;
   initialState?: {
     pagination?: Partial<PaginationState>;
     sorting?: SortingState;
@@ -74,7 +76,17 @@ export interface UseTableOptions<TData extends RowData, TValue> {
     columnVisibility?: ColumnVisibilityState;
     rowSelection?: RowSelectionState;
     globalFilter?: string;
+    expanded?: ExpandedState;
   };
+
+  /** Determines whether each row can be expanded. */
+  getRowCanExpand?: (row: DataTableRow<TData>) => boolean;
+
+  /** Returns nested children for client-side hierarchical data. */
+  getSubRows?: (originalRow: TData, index: number) => TData[] | undefined;
+
+  /** Whether expanded child rows participate in pagination. */
+  paginateExpandedRows?: boolean;
   /** Translation function exposed to all table components via table meta. */
   t?: TableTranslator;
 }
@@ -93,6 +105,8 @@ export interface UseTableReturn<TData extends RowData> {
   setGlobalFilter: Dispatch<SetStateAction<string>>;
   pagination: PaginationState;
   setPagination: Dispatch<SetStateAction<PaginationState>>;
+  expanded: ExpandedState;
+  setExpanded: Dispatch<SetStateAction<ExpandedState>>;
   queryParams: TableQueryParams;
 }
 
@@ -131,6 +145,7 @@ export interface TableBaseProps<TData extends RowData> {
     clearSelection: () => void;
   }) => ReactNode;
   renderFooter?: (table: DataTable<TData>) => ReactNode;
+  renderExpandedRow?: (row: DataTableRow<TData>) => ReactNode;
 }
 
 /** Renders a pre-built table instance; `data`/`columns` are not needed. */

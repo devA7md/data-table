@@ -1,5 +1,6 @@
 import { type ColumnDef, flexRender, type RowData } from "@tanstack/react-table";
 import { cn } from "cn";
+import { Fragment } from "react";
 
 import { ContextMenuTrigger } from "@/components/ui/context-menu";
 import {
@@ -49,6 +50,10 @@ function TableWithInternalTable<TData extends RowData, TValue>({
   manualPagination,
   manualSorting,
   manualFiltering,
+  manualExpanding,
+  getRowCanExpand,
+  getSubRows,
+  paginateExpandedRows,
   initialState,
   t,
   ...props
@@ -64,6 +69,10 @@ function TableWithInternalTable<TData extends RowData, TValue>({
     manualPagination,
     manualSorting,
     manualFiltering,
+    manualExpanding,
+    getRowCanExpand,
+    getSubRows,
+    paginateExpandedRows,
     initialState,
     t,
   });
@@ -103,6 +112,7 @@ function TableContent<TData extends RowData>({
   renderToolbar,
   renderSelectedRowActions,
   renderFooter,
+  renderExpandedRow,
 }: TableBaseProps<TData> & { table: DataTable<TData> }) {
   const t = getTableTranslator(table);
   const selectedRows = table.getSelectedRowModel().rows;
@@ -198,7 +208,6 @@ function TableContent<TData extends RowData>({
 
               const rowElement = (
                 <TableRow
-                  key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   onClick={() => onRowClick?.(row)}
                   onDoubleClick={() => onRowDoubleClick?.(row)}
@@ -212,16 +221,29 @@ function TableContent<TData extends RowData>({
                 </TableRow>
               );
 
-              if (!hasContextMenu) {
-                return rowElement;
-              }
-
               return (
-                <TableContextMenu key={row.id} row={row} actions={contextMenu} onClose={() => {}}>
-                  <ContextMenuTrigger render={rowElement}>
-                    {rowElement.props.children}
-                  </ContextMenuTrigger>
-                </TableContextMenu>
+                <Fragment key={row.id}>
+                  {hasContextMenu ? (
+                    <TableContextMenu row={row} actions={contextMenu} onClose={() => {}}>
+                      <ContextMenuTrigger render={rowElement}>
+                        {rowElement.props.children}
+                      </ContextMenuTrigger>
+                    </TableContextMenu>
+                  ) : (
+                    rowElement
+                  )}
+
+                  {row.getIsExpanded() && renderExpandedRow && (
+                    <TableRow>
+                      <TableCell
+                        colSpan={Math.max(1, row.getVisibleCells().length)}
+                        className={cn("p-0", density.cell)}
+                      >
+                        {renderExpandedRow(row)}
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </Fragment>
               );
             })
           ) : (

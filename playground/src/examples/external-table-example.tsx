@@ -16,7 +16,11 @@ import {
   readTableStateFromUrl,
   writeQueryParamsToUrl,
 } from "../lib/remote-users";
-import { createSelectedRowActions, createUserColumns, createUserRowActions } from "../lib/user-table";
+import {
+  createSelectedRowActions,
+  createUserColumns,
+  createUserRowActions,
+} from "../lib/user-table";
 
 /** Flattens the table query params into a string map that fits a URL. */
 function transformQueryParams(params: TableQueryParams): Record<string, string> {
@@ -66,6 +70,8 @@ export function ExternalTableExample({ lang }: { lang: Lang }) {
     manualPagination: true,
     manualSorting: true,
     manualFiltering: true,
+    manualExpanding: true,
+    getRowCanExpand: () => true,
     pageCount,
   });
 
@@ -120,6 +126,15 @@ export function ExternalTableExample({ lang }: { lang: Lang }) {
         renderToolbar={(table) => <TableToolbar table={table} showColumnView={false} />}
         renderSelectedRowActions={renderSelectedRowActions}
         renderFooter={(table) => <DataTablePagination table={table} />}
+        renderExpandedRow={(row) => (
+          <div className="space-y-2 p-4">
+            <p className="font-medium">
+              {row.original.name} {row.original.status}
+            </p>
+            <p className="text-muted-foreground text-sm">{row.original.email}</p>
+            <p className="text-muted-foreground text-sm">{row.original.role}</p>
+          </div>
+        )}
         classNames={{
           wrapper: "overflow-hidden rounded-2xl bg-primary/5",
         }}
