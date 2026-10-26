@@ -7,6 +7,16 @@ export type TableMessageParams = Record<string, string | number>;
  */
 export type TableTranslator = (key: string, params?: TableMessageParams) => string;
 
+/**
+ * Adapts a strictly-typed host translator (e.g. the `t` returned by `useT()`,
+ * constrained to the app's translation keys) to the loose `TableTranslator`
+ * the table expects. Keys the host translator doesn't know are returned
+ * untranslated and fall back to the built-in English messages.
+ */
+export function adaptTranslator<T extends (...args: never[]) => unknown>(t: T): TableTranslator {
+  return t as unknown as TableTranslator;
+}
+
 export type TableMessageKey =
   | "columns"
   | "toggle_columns"
