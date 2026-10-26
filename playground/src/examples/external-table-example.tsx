@@ -136,7 +136,7 @@ export function ExternalTableExample({ lang }: { lang: Lang }) {
           </div>
         )}
         classNames={{
-          wrapper: "overflow-hidden rounded-2xl bg-primary/5",
+          table: "overflow-hidden rounded-2xl bg-primary/5",
         }}
         size="large"
       />

@@ -113,8 +113,6 @@ export interface UseTableReturn<TData extends RowData> {
 export type TableClassNames = {
   /** Class for the outermost wrapper element. */
   root?: string;
-  /** Class for the bordered wrapper around the table. */
-  wrapper?: string;
   /** Class applied directly to the <table> element. */
   table?: string;
 };
